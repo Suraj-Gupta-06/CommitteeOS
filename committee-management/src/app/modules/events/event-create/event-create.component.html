@@ -1,0 +1,79 @@
+<section class="space-y-4">
+	<article class="workspace-panel">
+		<div class="workspace-panel-header">
+			<div>
+				<h3 class="workspace-panel-title">Create Event</h3>
+				<p class="workspace-panel-subtitle">Set up event details, ownership, and participation limits.</p>
+			</div>
+			<a routerLink="/events" class="workspace-btn-secondary">Back To Events</a>
+		</div>
+
+		<form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+			<div class="workspace-form-grid two-col">
+				<div>
+					<label class="workspace-label">Event Name</label>
+					<input class="workspace-input" formControlName="eventName" />
+					<p *ngIf="eventForm.controls.eventName.touched && eventForm.controls.eventName.invalid" class="workspace-helper-text text-rose-600">
+						Event name is required.
+					</p>
+				</div>
+
+				<div>
+					<label class="workspace-label">Date</label>
+					<input type="datetime-local" class="workspace-input" formControlName="eventDate" />
+				</div>
+
+				<div>
+					<label class="workspace-label">Location</label>
+					<input class="workspace-input" formControlName="location" />
+				</div>
+
+				<div>
+					<label class="workspace-label">Max Participants</label>
+					<input type="number" class="workspace-input" formControlName="maxParticipants" />
+				</div>
+
+				<div>
+					<label class="workspace-label">Committee</label>
+					<select class="workspace-select" formControlName="committeeId">
+						<option *ngFor="let committee of committees" [ngValue]="committee.id">
+							#{{ committee.id }} - {{ committee.committeeName }}
+						</option>
+					</select>
+				</div>
+
+				<div>
+					<label class="workspace-label">Category ID</label>
+					<input type="number" class="workspace-input" formControlName="categoryId" min="1" />
+				</div>
+
+				<div>
+					<label class="workspace-label">Status</label>
+					<select class="workspace-select" formControlName="status">
+						<option value="PLANNED">PLANNED</option>
+						<option value="ONGOING">ONGOING</option>
+						<option value="COMPLETED">COMPLETED</option>
+						<option value="CANCELLED">CANCELLED</option>
+					</select>
+				</div>
+
+				<div class="md:col-span-2">
+					<label class="workspace-label">Description</label>
+					<textarea class="workspace-textarea" formControlName="description"></textarea>
+				</div>
+			</div>
+
+			<p *ngIf="errorMessage" class="workspace-error">{{ errorMessage }}</p>
+
+			<div class="workspace-action-row">
+				<button
+					type="submit"
+					[disabled]="submitting"
+					class="workspace-btn-primary disabled:cursor-not-allowed disabled:opacity-65"
+				>
+					{{ submitting ? 'Saving...' : 'Save Event' }}
+				</button>
+			</div>
+		</form>
+	</article>
+</section>

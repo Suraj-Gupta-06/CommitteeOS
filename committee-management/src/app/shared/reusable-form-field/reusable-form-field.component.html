@@ -1,0 +1,5 @@
+<div class="mb-1 flex items-center justify-between gap-2">
+	<label class="mb-0 text-sm font-semibold text-slate-700">{{ label }}</label>
+	<small class="text-xs text-slate-500">{{ hint }}</small>
+</div>
+<small *ngIf="error" class="mt-1 block text-xs text-rose-600">{{ error }}</small>

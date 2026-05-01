@@ -1,0 +1,82 @@
+<section class="space-y-4">
+	<article class="workspace-panel">
+		<div class="workspace-panel-header">
+			<div>
+				<h3 class="workspace-panel-title">Create Announcement</h3>
+				<p class="workspace-panel-subtitle">Publish notices to keep committees and students informed.</p>
+			</div>
+			<a routerLink="/announcements" class="workspace-btn-secondary">Back To Announcements</a>
+		</div>
+
+		<form [formGroup]="announcementForm" (ngSubmit)="onSubmit()">
+			<div class="workspace-form-grid">
+				<div>
+					<label class="workspace-label">Message</label>
+					<textarea class="workspace-textarea" formControlName="message"></textarea>
+					<p *ngIf="announcementForm.controls.message.touched && announcementForm.controls.message.invalid" class="workspace-helper-text text-rose-600">
+						Announcement message should contain at least 5 characters.
+					</p>
+				</div>
+			</div>
+
+			<div class="workspace-form-grid two-col mt-3">
+				<div>
+					<label class="workspace-label">Announcement Type</label>
+					<select class="workspace-select" formControlName="type">
+						<option value="general">General</option>
+						<option value="event">Event</option>
+						<option value="task">Task</option>
+					</select>
+				</div>
+
+				<div *ngIf="selectedType !== 'general'">
+					<label class="workspace-label">Reference {{ selectedType === 'event' ? 'Event' : 'Task' }}</label>
+					<select class="workspace-select" formControlName="referenceId">
+						<option [ngValue]="null">Select {{ selectedType === 'event' ? 'event' : 'task' }}</option>
+						<option *ngFor="let event of events" [ngValue]="event.id" [hidden]="selectedType !== 'event'">
+							#{{ event.id }} - {{ event.eventName }}
+						</option>
+						<option *ngFor="let task of tasks" [ngValue]="task.id" [hidden]="selectedType !== 'task'">
+							#{{ task.id }} - {{ task.title }}
+						</option>
+					</select>
+					<p *ngIf="loadingReferenceOptions" class="workspace-helper-text">Loading available references...</p>
+					<p *ngIf="announcementForm.controls.referenceId.touched && announcementForm.controls.referenceId.invalid" class="workspace-helper-text text-rose-600">
+						Reference is required for event and task announcements.
+					</p>
+				</div>
+			</div>
+
+			<div class="mt-3">
+				<label class="inline-flex items-center gap-2 text-sm font-medium text-slate-700">
+					<input type="checkbox" class="workspace-checkbox" formControlName="important" />
+					Mark as important
+				</label>
+			</div>
+
+			<div class="workspace-form-grid two-col mt-3">
+				<div>
+					<label class="workspace-label">Committee ID</label>
+					<input class="workspace-input" type="number" formControlName="committeeId" />
+				</div>
+
+				<div>
+					<label class="workspace-label">User ID</label>
+					<input class="workspace-input" type="number" formControlName="userId" />
+				</div>
+			</div>
+
+			<p *ngIf="errorMessage" class="workspace-error">{{ errorMessage }}</p>
+
+			<div class="workspace-action-row">
+				<button
+					type="submit"
+					[disabled]="saving"
+					class="workspace-btn-primary disabled:cursor-not-allowed disabled:opacity-65"
+				>
+					{{ saving ? 'Saving...' : 'Publish Announcement' }}
+				</button>
+			</div>
+		</form>
+	</article>
+</section>
